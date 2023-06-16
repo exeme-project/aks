@@ -57,7 +57,7 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-      description: The Code of Conduct can be found [here](github.com/exeme-project/aks/tree/main/CODE_OF_CONDUCT.md).
+      description: The Code of Conduct can be found [here](github.com/exeme-project/aks/blob/main/CODE_OF_CONDUCT.md).
       options:
         - label: I agree to follow this project's Code of Conduct.
           required: true

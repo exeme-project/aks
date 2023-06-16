@@ -52,7 +52,7 @@ Markdown files always have at the top:
 <!-- Part of the Exeme Project, under the MIT license. See '/LICENSE' for license information. SPDX-License-Identifier: MIT License. -->
 ```
 
-For example, see the top of [**this file's**](https://raw.githubusercontent.com/exeme-project/aks/main/CONTRIBUTING.md) raw contents.
+For example, see the top of [**this file's**](https://github.com/exeme-project/aks/blob/main/CONTRIBUTING.md) raw contents.
 
 ### C++ Source Code
 
