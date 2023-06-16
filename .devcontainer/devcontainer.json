@@ -1,0 +1,35 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/cpp",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// Update `../.vscode/extensions.json` as well.
+				"albert.tabout",
+				"alexanderte.dainty-one-dark-pro-vscode",
+				"donjayamanne.githistory",
+				"github.vscode-github-actions",
+				"gruntfuggly.todo-tree",
+				"lextudio.restructuredtext",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"mhutchie.git-graph",
+				"ms-vscode.cmake-tools",
+				"ms-vscode-remote.remote-containers",
+				"lextudio.restructuredtext",
+				"pkief.material-icon-theme",
+				"redhat.vscode-yaml",
+				"revng.llvm-ir",
+				"trond-snekvik.simple-rst",
+				"twxs.cmake",
+				"vadimcn.vscode-lldb",
+				"xaver.clang-format"
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/python:1": {
+			"installTools": true,
+			"optimize": true,
+			"version": "os-provided"
+		}
+	}
+}
