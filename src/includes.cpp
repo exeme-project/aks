@@ -3,12 +3,9 @@
  * license information. SPDX-License-Identifier: MIT License.
  */
 
-#include "./includes.cpp"
+#pragma once
 
-#include "./win_api/interface.cpp"
-
-int main() {
-	auto *watcher = new DeviceWatcher();
-
-	watcher->start();
-}
+#include <Windows.h>
+#include <iostream>
+#include <thread>
+#include <vector>
