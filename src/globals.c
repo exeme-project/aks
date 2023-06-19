@@ -3,10 +3,8 @@
  * license information. SPDX-License-Identifier: MIT License.
  */
 
+#pragma once
 
 #include "./includes.c"
 
-int main(void) {
-    printf("Hello, World!\n");
-    return 0;
-}
+const size_t negativeULL = (size_t)-1;

@@ -3,10 +3,9 @@
  * license information. SPDX-License-Identifier: MIT License.
  */
 
+#pragma once
 
-#include "./includes.c"
+#define _CRT_SECURE_NO_WARNINGS // What is deprecated on Windows isn't always on
+								// other OSes.
 
-int main(void) {
-    printf("Hello, World!\n");
-    return 0;
-}
+#include "./globals.c"
