@@ -6,6 +6,8 @@
 
 #include "./includes.c"
 
+#include "./win-api/devices.c"
+
 int main(void) {
     printf("Hello, World!\n");
     return 0;

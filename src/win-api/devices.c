@@ -6,10 +6,28 @@
 #pragma once
 
 #include "../includes.c"
-#include <winuser.h>
 
-struct Device {
-	const RAWINPUTDEVICE *device
+#include "../utils/array.c"
+#include "../utils/panic.c"
+
+struct InputDevice {};
+
+#define INPUTDEVICE_STRUCT_SIZE sizeof(struct InputDevice)
+
+struct InputDevices {
+	struct Array *devices;
 };
 
-#define DEVICE_STRUCT_SIZE sizeof(struct Device)
+#define INPUTDEVICES_STRUCT_SIZE sizeof(struct InputDevices)
+
+struct InputDevices *devices_create(void) {
+	struct InputDevices *self = malloc(INPUTDEVICES_STRUCT_SIZE);
+
+	if (self == NULL) {
+		panic("failed to malloc Devices struct");
+	}
+
+    self->devices = array_new();
+
+	return self;
+}
