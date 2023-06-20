@@ -10,6 +10,7 @@
 
 #include "./globals.c"
 
+#include <Windows.h>
 #include <ctype.h>
 #include <malloc.h>
 #include <stdarg.h>
