@@ -113,12 +113,7 @@ void inputDevices_get(struct InputDevices *self) {
 		}
 	}
 
-	for (size_t i = 0; i < self->inputDevices->length; i++) {
-		inputDevice_free(
-			(struct InputDevice *)array_get(self->inputDevices, i));
-	}
-
-	array_clear(self->inputDevices);
+	array_clear(self->inputDevices, inputDevice_free);
 
 	for (size_t i = 0; i < deviceNumber; i++) {
 		array_insert(self->inputDevices, self->inputDevices->length,
