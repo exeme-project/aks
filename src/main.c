@@ -34,8 +34,11 @@ int main(void) {
 				   inputDevice->deviceInfo->keyboard.dwNumberOfKeysTotal);
 			printf("Type of Keyboard: %lu\n",
 				   inputDevice->deviceInfo->keyboard.dwType);
-			printf("Sub-Type of Keyboard: %lu\n\n",
+			printf("Sub-Type of Keyboard: %lu\n",
 				   inputDevice->deviceInfo->keyboard.dwSubType);
+			printf("Usage Page: %hu\n",
+				   inputDevice->deviceInfo->hid.usUsagePage);
+			printf("Usage: %hu\n\n", inputDevice->deviceInfo->hid.usUsage);
 			break;
 		case RIM_TYPEMOUSE:
 			printf("MOUSE %s\n", inputDevice->name->_value);
@@ -52,6 +55,20 @@ int main(void) {
 				   inputDevice->deviceInfo->mouse.fHasHorizontalWheel
 					   ? "true"
 					   : "false");
+			printf("Usage Page: %hu\n",
+				   inputDevice->deviceInfo->hid.usUsagePage);
+			printf("Usage: %hu\n\n", inputDevice->deviceInfo->hid.usUsage);
+			break;
+		case RIM_TYPEHID:
+			printf("HID %s\n", inputDevice->name->_value);
+			printf("Vendor ID: %lu\n", inputDevice->deviceInfo->hid.dwVendorId);
+			printf("Product ID: %lu\n",
+				   inputDevice->deviceInfo->hid.dwProductId);
+			printf("Version Number: %lu\n",
+				   inputDevice->deviceInfo->hid.dwVersionNumber);
+			printf("Usage Page: %hu\n",
+				   inputDevice->deviceInfo->hid.usUsagePage);
+			printf("Usage: %hu\n\n", inputDevice->deviceInfo->hid.usUsage);
 			break;
 		}
 	}
