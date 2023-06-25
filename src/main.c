@@ -18,7 +18,7 @@ int main(void) {
 
 		switch (inputDevice->device->dwType) {
 		case RIM_TYPEKEYBOARD:
-			printf("%s\n", inputDevice->name->_value);
+			printf("KEYBOARD %s\n", inputDevice->name->_value);
 			printf("Vendor ID: %lu\n", inputDevice->deviceInfo->hid.dwVendorId);
 			printf("Product ID: %lu\n",
 				   inputDevice->deviceInfo->hid.dwProductId);
@@ -36,6 +36,22 @@ int main(void) {
 				   inputDevice->deviceInfo->keyboard.dwType);
 			printf("Sub-Type of Keyboard: %lu\n\n",
 				   inputDevice->deviceInfo->keyboard.dwSubType);
+			break;
+		case RIM_TYPEMOUSE:
+			printf("MOUSE %s\n", inputDevice->name->_value);
+			printf("Vendor ID: %lu\n", inputDevice->deviceInfo->hid.dwVendorId);
+			printf("Product ID: %lu\n",
+				   inputDevice->deviceInfo->hid.dwProductId);
+			printf("Version Number: %lu\n",
+				   inputDevice->deviceInfo->hid.dwVersionNumber);
+			printf("Number of Buttons: %lu\n",
+				   inputDevice->deviceInfo->mouse.dwNumberOfButtons);
+			printf("Sample Rate: %lu\n",
+				   inputDevice->deviceInfo->mouse.dwSampleRate);
+			printf("Horizontal Wheel Present: %s\n",
+				   inputDevice->deviceInfo->mouse.fHasHorizontalWheel
+					   ? "true"
+					   : "false");
 			break;
 		}
 	}
