@@ -3,12 +3,44 @@
  * license information. SPDX-License-Identifier: MIT License.
  */
 
-
 #include "./includes.c"
 
 #include "./win-api/devices.c"
+#include <winuser.h>
 
 int main(void) {
-    printf("Hello, World!\n");
-    return 0;
+	struct InputDevices *self = inputDevices_new();
+	inputDevices_getDevices(self);
+
+	for (size_t i = 0; i < self->inputDevices->length; i++) {
+		struct InputDevice *inputDevice =
+			(struct InputDevice *)array_get(self->inputDevices, i);
+
+		switch (inputDevice->device->dwType) {
+		case RIM_TYPEKEYBOARD:
+			printf("%s\n", inputDevice->name->_value);
+			printf("Vendor ID: %lu\n", inputDevice->deviceInfo->hid.dwVendorId);
+			printf("Product ID: %lu\n",
+				   inputDevice->deviceInfo->hid.dwProductId);
+			printf("Version Number: %lu\n",
+				   inputDevice->deviceInfo->hid.dwVersionNumber);
+			printf("Keyboard Mode: %lu\n",
+				   inputDevice->deviceInfo->keyboard.dwKeyboardMode);
+			printf("Number of Function Keys: %lu\n",
+				   inputDevice->deviceInfo->keyboard.dwNumberOfFunctionKeys);
+			printf("Number of Indicators: %lu\n",
+				   inputDevice->deviceInfo->keyboard.dwNumberOfIndicators);
+			printf("Number of Keys Total: %lu\n",
+				   inputDevice->deviceInfo->keyboard.dwNumberOfKeysTotal);
+			printf("Type of Keyboard: %lu\n",
+				   inputDevice->deviceInfo->keyboard.dwType);
+			printf("Sub-Type of Keyboard: %lu\n\n",
+				   inputDevice->deviceInfo->keyboard.dwSubType);
+			break;
+		}
+	}
+
+	inputDevices_free(self);
+
+	return 0;
 }

@@ -9,28 +9,105 @@
 
 #include "../utils/array.c"
 #include "../utils/panic.c"
+#include "../utils/string.c"
 #include <winuser.h>
+
+#define RAWINPUTDEVICELIST_STRUCT_SIZE sizeof(struct tagRAWINPUTDEVICELIST)
+#define RID_DEVICE_INFO_STRUCT_SIZE sizeof(struct tagRID_DEVICE_INFO)
 
 /**
  * Represents an input device.
  */
 struct InputDevice {
-	const struct String *NAME;
+	struct tagRID_DEVICE_INFO *deviceInfo;
+	struct String *name;
+	struct tagRAWINPUTDEVICELIST *device;
 };
 
 #define INPUTDEVICE_STRUCT_SIZE sizeof(struct InputDevice)
 
-/*
+/**
+ * Gets the input device's name.
+ *
+ * @param self The current InputDevice struct.
+ */
+void inputDevice_getName(struct InputDevice *self) {
+	if (!self->name) {
+		char *name = NULL;
+		UINT nameLength = 0;
+
+		if (GetRawInputDeviceInfo(self->device->hDevice, RIDI_DEVICENAME, NULL,
+								  &nameLength) == (UINT)-1) {
+			panic("failed to get length of device name");
+		}
+
+		if (!(name = malloc(nameLength + 1))) {
+			panic("failed to malloc device name string");
+		}
+
+		if (GetRawInputDeviceInfo(self->device->hDevice, RIDI_DEVICENAME, name,
+								  &nameLength) == (UINT)-1) {
+			panic("failed to get device name");
+		}
+
+		self->name = string_new(name, false);
+	}
+}
+
+void inputDevice_getInfoStruct(struct InputDevice *self) {
+	if (!self->deviceInfo) {
+		UINT infoSize = 0;
+
+		if (GetRawInputDeviceInfo(self->device->hDevice, RIDI_DEVICEINFO, NULL,
+								  &infoSize) == (UINT)-1) {
+			panic("failed to get size of RID_DEVICE_INFO struct");
+		}
+
+		if (!(self->deviceInfo = malloc(infoSize))) {
+			panic("failed to malloc RID_DEVICE_INFO struct");
+		}
+
+		if (GetRawInputDeviceInfo(self->device->hDevice, RIDI_DEVICEINFO,
+								  self->deviceInfo, &infoSize) == (UINT)-1) {
+			panic("failed to get RID_DEVICE_INFO struct");
+		}
+	}
+}
+
+/**
+ * Gets the input device's info.
+ *
+ * @param self The current InputDevice struct.
+ */
+void inputDevice_getInfo(struct InputDevice *self) {
+	inputDevice_getName(self);
+	inputDevice_getInfoStruct(self);
+}
+
+/**
  * Creates a new InputDevice struct.
  *
  * @return The created InputDevice struct.
  */
-struct InputDevice *inputDevice_create(struct tagRAWINPUTDEVICELIST device) {
+struct InputDevice *inputDevice_new(struct tagRAWINPUTDEVICELIST device) {
 	struct InputDevice *self = malloc(INPUTDEVICE_STRUCT_SIZE);
 
-	if (self == NULL) {
+	if (!self) {
 		panic("failed to malloc InputDevice struct");
 	}
+
+	self->deviceInfo = NULL;
+	self->name = NULL;
+
+	self->device = malloc(RAWINPUTDEVICELIST_STRUCT_SIZE);
+
+	if (!self->device) {
+		panic("failed to malloc RAWINPUTDEVICELIST struct");
+	}
+
+	memcpy(self->device, &device, RAWINPUTDEVICELIST_STRUCT_SIZE);
+
+	inputDevice_getInfo(self);
 
 	return self;
 }
@@ -42,6 +119,10 @@ struct InputDevice *inputDevice_create(struct tagRAWINPUTDEVICELIST device) {
  */
 void inputDevice_free(struct InputDevice *self) {
 	if (self) {
+		free(self->deviceInfo);
+		string_free(self->name);
+		free(self->device);
+
 		free(self);
 		self = NULL;
 	} else {
@@ -63,10 +144,10 @@ struct InputDevices {
  *
  * @return The created InputDevice struct.
  */
-struct InputDevices *inputDevices_create(void) {
+struct InputDevices *inputDevices_new(void) {
 	struct InputDevices *self = malloc(INPUTDEVICES_STRUCT_SIZE);
 
-	if (self == NULL) {
+	if (!self) {
 		panic("failed to malloc Devices struct");
 	}
 
@@ -80,7 +161,7 @@ struct InputDevices *inputDevices_create(void) {
  *
  * @param self The current InputDevices struct.
  */
-void inputDevices_get(struct InputDevices *self) {
+void inputDevices_getDevices(struct InputDevices *self) {
 	UINT deviceNumber;
 	PRAWINPUTDEVICELIST inputDevices = NULL;
 
@@ -93,8 +174,8 @@ void inputDevices_get(struct InputDevices *self) {
 		if (deviceNumber == 0) {
 			panic("no devices connected to host");
 		} else {
-			if ((inputDevices = malloc(sizeof(RAWINPUTDEVICELIST) *
-									   deviceNumber)) == NULL) {
+			if (!(inputDevices =
+					  malloc(sizeof(RAWINPUTDEVICELIST) * deviceNumber))) {
 				panic("failed to malloc devices array");
 			}
 
@@ -117,7 +198,7 @@ void inputDevices_get(struct InputDevices *self) {
 
 	for (size_t i = 0; i < deviceNumber; i++) {
 		array_insert(self->inputDevices, self->inputDevices->length,
-					 inputDevice_create(inputDevices[i]));
+					 inputDevice_new(inputDevices[i]));
 	}
 
 	free(inputDevices);
