@@ -10,7 +10,6 @@
 #include "../utils/array.c"
 #include "../utils/panic.c"
 #include "../utils/string.c"
-#include <winuser.h>
 
 #define RAWINPUTDEVICELIST_STRUCT_SIZE sizeof(struct tagRAWINPUTDEVICELIST)
 #define RID_DEVICE_INFO_STRUCT_SIZE sizeof(struct tagRID_DEVICE_INFO)

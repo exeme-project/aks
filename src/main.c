@@ -6,7 +6,6 @@
 #include "./includes.c"
 
 #include "./win-api/devices.c"
-#include <winuser.h>
 
 int main(void) {
 	struct InputDevices *self = inputDevices_new();
