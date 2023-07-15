@@ -117,7 +117,7 @@ struct InputDevice *inputDevice_new(struct tagRAWINPUTDEVICELIST device) {
  * @param self The current InputDevice struct.
  */
 void inputDevice_free(struct InputDevice **self) {
-	if (self) {
+	if (self && *self) {
 		free((*self)->deviceInfo);
 		string_free(&(*self)->name);
 		free((*self)->device);
@@ -211,7 +211,7 @@ void inputDevices_getDevices(struct InputDevices *self) {
 void inputDevices_free(struct InputDevices **self) {
 	struct InputDevice *arrayItem;
 
-	if (self) {
+	if (self && *self) {
 		for (size_t i = 0; i < (*self)->inputDevices->length; i++) {
 			arrayItem =
 				(struct InputDevice *)array_get((*self)->inputDevices, i);
