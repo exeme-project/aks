@@ -72,7 +72,7 @@ int main(void) {
 		}
 	}
 
-	inputDevices_free(self);
+	inputDevices_free(&self);
 
 	return 0;
 }

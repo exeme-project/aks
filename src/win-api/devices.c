@@ -116,14 +116,14 @@ struct InputDevice *inputDevice_new(struct tagRAWINPUTDEVICELIST device) {
  *
  * @param self The current InputDevice struct.
  */
-void inputDevice_free(struct InputDevice *self) {
+void inputDevice_free(struct InputDevice **self) {
 	if (self) {
-		free(self->deviceInfo);
-		string_free(self->name);
-		free(self->device);
+		free((*self)->deviceInfo);
+		string_free(&(*self)->name);
+		free((*self)->device);
 
-		free(self);
-		self = NULL;
+		free(*self);
+		*self = NULL;
 	} else {
 		panic("InputDevice struct has already been freed");
 	}
@@ -208,17 +208,21 @@ void inputDevices_getDevices(struct InputDevices *self) {
  *
  * @param self The current InputDevices struct.
  */
-void inputDevices_free(struct InputDevices *self) {
+void inputDevices_free(struct InputDevices **self) {
+	struct InputDevice *arrayItem;
+
 	if (self) {
-		for (size_t i = 0; i < self->inputDevices->length; i++) {
-			inputDevice_free(
-				(struct InputDevice *)array_get(self->inputDevices, i));
+		for (size_t i = 0; i < (*self)->inputDevices->length; i++) {
+			arrayItem =
+				(struct InputDevice *)array_get((*self)->inputDevices, i);
+
+			inputDevice_free(&arrayItem);
 		}
 
-		array_free(self->inputDevices);
+		array_free(&(*self)->inputDevices);
 
-		free(self);
-		self = NULL;
+		free(*self);
+		*self = NULL;
 	} else {
 		panic("InputDevices struct has already been freed");
 	}
